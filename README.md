@@ -1,18 +1,13 @@
-# Scout Elasticsearch Driver
-
-:exclamation: **If you are interested in being a collaborator, please fill in [this form](https://goo.gl/forms/hcB8LPQCyDpNRt9u2).** :exclamation:    
+# Scout Elasticsearch Driver   
 
 ---
 
 [![Packagist](https://img.shields.io/packagist/v/babenkoivan/scout-elasticsearch-driver.svg)](https://packagist.org/packages/babenkoivan/scout-elasticsearch-driver)
 [![Packagist](https://img.shields.io/packagist/dt/babenkoivan/scout-elasticsearch-driver.svg)](https://packagist.org/packages/babenkoivan/scout-elasticsearch-driver)
 [![Build Status](https://travis-ci.com/babenkoivan/scout-elasticsearch-driver.svg?branch=master)](https://travis-ci.com/babenkoivan/scout-elasticsearch-driver)
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/scout-elasticsearch-driver/Lobby)
-[![Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://www.paypal.me/ivanbabenko)
+[![Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://www.paypal.me/babenkoi)
 
 :beer: If you like my package, it'd be nice of you [to buy me a beer](https://www.paypal.me/ivanbabenko).
- 
-:octocat: The project has a [chat room on Gitter](https://gitter.im/scout-elasticsearch-driver/Lobby)!
 
 ---
 
@@ -49,7 +44,7 @@ Check out its [features](#features)!
 The package has been tested in the following configuration: 
 
 * PHP version &gt;=7.1.3, &lt;=7.3
-* Laravel Framework version 5.8
+* Laravel Framework version &gt;=5.8, &lt;=6
 * Elasticsearch version &gt;=7
 
 ## Installation
@@ -84,7 +79,7 @@ The available options are:
 
 Option | Description
 --- | ---
-client | A setting hash to build Elasticsearch client. More information you can find [here](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/_configuration.html#_building_the_client_from_a_configuration_hash). By default the host is set to `localhost:9200`.
+client | A setting hash to build Elasticsearch client. More information you can find [here](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/configuration.html#_building_the_client_from_a_configuration_hash). By default the host is set to `localhost:9200`.
 update_mapping | The option that specifies whether to update a mapping automatically or not. By default it is set to `true`.
 indexer | Set to `single` for the single document indexing and to `bulk` for the bulk document indexing. By default is set to `single`.
 document_refresh | This option controls when updated documents appear in the search results. Can be set to `'true'`, `'false'`, `'wait_for'` or `null`. More details about this option you can find [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-refresh.html). By default set to `null`.
@@ -270,6 +265,14 @@ App\MyModel::search('*')
     ->get();
 ```
 
+And filter out results with a score less than [min_score](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#request-body-search-min-score): 
+
+```php
+App\MyModel::search('sales')
+    ->minScore(1.0)
+    ->get();
+```
+
 At last, if you want to send a custom request, you can use the `searchRaw` method:
 
 ```php
@@ -353,7 +356,7 @@ class MySearch extends SearchRule
 ```
 
 You can read more about bool queries [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html) 
-and about highlighting [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html#search-request-highlighting).
+and about highlighting [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#request-body-search-highlighting).
 
 The default search rule returns the following payload:
 
@@ -441,6 +444,8 @@ whereBetween($field, $value) | whereBetween('price', [100, 200]) | Checks if a v
 whereNotBetween($field, $value) | whereNotBetween('price', [100, 200]) | Checks if a value isn't in a range.
 whereExists($field) | whereExists('unemployed') | Checks if a value is defined.
 whereNotExists($field) | whereNotExists('unemployed') | Checks if a value isn't defined.  
+whereMatch($field, $value) | whereMatch('tags', 'travel') | Filters records matching exact value. [Here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) you can find more about syntax.
+whereNotMatch($field, $value) | whereNotMatch('tags', 'travel') | Filters records not matching exact value. [Here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) you can find more about syntax.
 whereRegexp($field, $value, $flags = 'ALL') | whereRegexp('name.raw', 'A.+') | Filters records according to a given regular expression. [Here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html#regexp-syntax) you can find more about syntax.
 whereGeoDistance($field, $value, $distance) | whereGeoDistance('location', [-70, 40], '1000m') | Filters records according to given point and distance from it. [Here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-distance-query.html) you can find more about syntax.
 whereGeoBoundingBox($field, array $value) | whereGeoBoundingBox('location', ['top_left' =>  [-74.1, 40.73], 'bottom_right' => [-71.12, 40.01]]) | Filters records within given boundings. [Here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-bounding-box-query.html) you can find more about syntax.
