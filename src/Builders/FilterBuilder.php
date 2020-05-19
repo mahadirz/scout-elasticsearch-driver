@@ -54,6 +54,13 @@ class FilterBuilder extends Builder
     public $minScore;
 
     /**
+     * Enable or disable rescore for
+     * Rank To Learn plugin (RTL)
+     * @var bool
+     */
+    public $rescore = false;
+
+    /**
      * FilterBuilder constructor.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
@@ -73,6 +80,18 @@ class FilterBuilder extends Builder
                 ],
             ];
         }
+    }
+
+    /**
+     * Enable rescore
+     *
+     * @return $this
+     */
+    public function rescore()
+    {
+        $this->rescore = true;
+
+        return $this;
     }
 
     /**
